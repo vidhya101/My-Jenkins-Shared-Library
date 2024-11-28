@@ -1,7 +1,7 @@
-def success() {
+def success(Map config = [:]) {
     emailext (
-        subject: "✅ [SUCCESS] Pipeline: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-        body: """
+        subject: config.subject ?: "✅ [SUCCESS] Pipeline: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+        body: config.body ?: """
             <html>
                 <body>
                     <h2>Build Successful!</h2>
@@ -22,16 +22,16 @@ def success() {
                 </body>
             </html>
         """,
-        to: '$DEFAULT_RECIPIENTS',
-        mimeType: 'text/html',
-        attachLog: true
+        to: config.to ?: '$DEFAULT_RECIPIENTS',
+        mimeType: config.mimeType ?: 'text/html',
+        attachLog: config.attachLog ?: true
     )
 }
 
-def failure() {
+def failure(Map config = [:]) {
     emailext (
-        subject: "❌ [FAILED] Pipeline: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-        body: """
+        subject: config.subject ?: "❌ [FAILED] Pipeline: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+        body: config.body ?: """
             <html>
                 <body>
                     <h2 style="color: red;">Build Failed!</h2>
@@ -47,8 +47,8 @@ def failure() {
                 </body>
             </html>
         """,
-        to: '$DEFAULT_RECIPIENTS',
-        mimeType: 'text/html',
-        attachLog: true
+        to: config.to ?: '$DEFAULT_RECIPIENTS',
+        mimeType: config.mimeType ?: 'text/html',
+        attachLog: config.attachLog ?: true
     )
 }
