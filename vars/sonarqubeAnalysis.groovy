@@ -6,7 +6,7 @@ def call(String sonarserver, String scannerHome) {
             -Dsonar.projectKey=Youtube \
             -Dsonar.projectName=Youtube \
             -Dsonar.projectVersion=1.0 \
-            -Dsonar.sources=src/
+            -Dsonar.sources=src
         """
     }
 }
