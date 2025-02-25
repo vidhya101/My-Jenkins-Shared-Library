@@ -1,54 +1,21 @@
-def success(Map config = [:]) {
-    emailext (
-        subject: config.subject ?: "✅ [SUCCESS] Pipeline: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-        body: config.body ?: """
+def call(String subject, String body, String recipients, String buildUrl, String buildNumber, String buildId, String buildTimestamp, String buildStatus) {
+    emailext(
+        subject: subject,
+        body: """
             <html>
                 <body>
-                    <h2>Build Successful!</h2>
+                    <h2>${buildStatus}!</h2>
                     <p><strong>Pipeline:</strong> ${env.JOB_NAME}</p>
-                    <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
-                    <p><strong>Build ID:</strong> ${env.BUILD_ID}</p>
-                    <p><strong>Build URL:</strong> <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>
-                    <p><strong>Build Timestamp:</strong> ${env.BUILD_TIMESTAMP}</p>
-                    <h3>Stages Summary:</h3>
-                    <ul>
-                        <li>Unit Tests: Completed</li>
-                        <li>Checkstyle Analysis: Completed</li>
-                        <li>SonarQube Analysis: Passed</li>
-                        <li>Quality Gate: Passed</li>
-                        <li>Artifact Upload: Successful</li>
-                    </ul>
-                    <p>Check console output for detailed information.</p>
+                    <p><strong>Build Number:</strong> ${buildNumber}</p>
+                    <p><strong>Build ID:</strong> ${buildId}</p>
+                    <p><strong>Build URL:</strong> <a href='${buildUrl}'>${buildUrl}</a></p>
+                    <p><strong>Build Timestamp:</strong> ${buildTimestamp}</p>
+                    <p>${body}</p>
                 </body>
             </html>
         """,
-        to: config.to ?: '$DEFAULT_RECIPIENTS',
-        mimeType: config.mimeType ?: 'text/html',
-        attachLog: config.attachLog ?: true
-    )
-}
-
-def failure(Map config = [:]) {
-    emailext (
-        subject: config.subject ?: "❌ [FAILED] Pipeline: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-        body: config.body ?: """
-            <html>
-                <body>
-                    <h2 style="color: red;">Build Failed!</h2>
-                    <p><strong>Pipeline:</strong> ${env.JOB_NAME}</p>
-                    <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
-                    <p><strong>Build ID:</strong> ${env.BUILD_ID}</p>
-                    <p><strong>Build URL:</strong> <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>
-                    <p><strong>Build Timestamp:</strong> ${env.BUILD_TIMESTAMP}</p>
-                    <p><strong>Failed Stage:</strong> ${currentBuild.result}</p>
-                    <p>Check console output attached for error details.</p>
-                    <h3>Last Successful Build:</h3>
-                    <p><strong>Build Number:</strong> ${currentBuild.previousSuccessfulBuild?.number ?: 'None'}</p>
-                </body>
-            </html>
-        """,
-        to: config.to ?: '$DEFAULT_RECIPIENTS',
-        mimeType: config.mimeType ?: 'text/html',
-        attachLog: config.attachLog ?: true
+        to: recipients,
+        mimeType: 'text/html',
+        attachLog: true
     )
 }
