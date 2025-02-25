@@ -1,7 +1,8 @@
 def call() {
     withSonarQubeEnv('sonarserver') {
         sh '''
-            ${SCANNER_HOME}/bin/sonar-scanner \
+            export SONAR_SCANNER_OPTS="${JAVA_OPTS}"
+            ${scannerHome}/bin/sonar-scanner \
             -Dsonar.projectName=Youtube \
             -Dsonar.projectKey=Youtube \
             -Dsonar.sources=. \
