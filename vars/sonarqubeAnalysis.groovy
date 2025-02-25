@@ -1,5 +1,5 @@
-def call(String sonarServer, String scannerHome) {
-    withSonarQubeEnv(sonarServer) {
+def call(String sonarserver, String scannerHome) {
+    withSonarQubeEnv(sonarserver) {
         sh """
             export SONAR_SCANNER_OPTS="${JAVA_OPTS}"
             ${scannerHome}/bin/sonar-scanner \
